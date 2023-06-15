@@ -1,0 +1,297 @@
+.wrapGeoIpReaspekt{
+	font-family: Arial;
+}
+#ReaspektPopupBody{
+    background: #ffffff;
+    font-family: Arial;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
+                0 2px 2px rgba(0,0,0,0.11), 
+                0 4px 4px rgba(0,0,0,0.11), 
+                0 6px 8px rgba(0,0,0,0.11),
+                0 8px 16px rgba(0,0,0,0.11);
+    border-radius: 10px;
+    font-size: 14px;
+}
+.reaspektGeobaseTitle {
+    color: #363636;
+    font-family: Helvetica;
+    font-size: 14px;
+    text-shadow: 0 0 0.1px #878787;
+    line-height: 100%;
+    margin-bottom: 18px;
+    text-transform: none;
+}
+.reaspekt_row {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+.reaspektGeobaseCities .reaspektGeobaseAct {
+    min-width: min-content;
+    box-sizing: border-box;
+    position: relative;
+    min-height: 1px;
+    margin-right: 8px;
+	margin-bottom: 20px;
+}
+.reaspektGeobaseCities .reaspektGeobaseAct a,
+.reaspektGeobaseCities .reaspektGeobaseAct strong {
+	font-size: 13px;
+    line-height: 18px;
+	color: #363636;
+    white-space: nowrap;
+    text-decoration: none;
+    border: none;
+    transition: all .2s ease;
+    border-radius: 4px;
+    background: #efefef;
+    padding: 6px 10px 7px;
+}
+.reaspektGeobaseCities .reaspektGeobaseAct strong {
+    cursor: default;
+    color: #000000;
+    background: #dbdbdb;
+    font-weight: normal;
+    text-shadow: 0 0 0.1px #545454;
+}
+.reaspektGeobaseCities .reaspektGeobaseAct a:hover {
+    color: #000000;
+    text-decoration: none;
+    background: #dbdbdb;
+}
+#reaspektGeobaseFind {
+    margin: 0 0 25px 0;
+    position: relative;
+}
+
+.wrapGeoIpReaspekt {
+	position: relative;
+	display: inline-block;
+}
+.wrapGeoIpReaspekt .linkReaspekt{
+	color: #1989CB;
+	text-decoration: none;
+	border-bottom: 1px dashed #1989CB;
+	cursor: pointer;
+	line-height: 100%;
+	display: inline-block;
+}
+.wrapGeoIpReaspekt .linkReaspekt:hover{
+	border-bottom-color: transparent;
+}
+#wrapQuestionReaspekt{
+	position: absolute;
+	left: 0;
+	top: 100%;
+	white-space: nowrap;
+	z-index: 5;
+	background-color: #ffffff;
+	border-radius: 5px;
+	box-shadow: 0 -1px 7px -1px #000;
+	margin-top: 10px;
+}
+#wrapQuestionReaspekt:before{
+	position: absolute;
+	border-bottom: 5px solid #ffffff;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	content: "";
+	display: block;
+	right: 50%;
+	bottom: 100%;
+}
+.questionYourCityReaspekt{
+	padding: 10px 10px 5px;
+}
+.questionCityReaspekt{
+	padding: 0 10px 10px;
+}
+.questionButtonReaspekt {
+    background-color: #c3c3c3;
+    border-radius: 0 0 5px 5px;
+    color: #000000;
+	overflow: hidden;
+}
+.questionNoReaspekt, .questionYesReaspekt {
+    box-sizing: border-box;
+    float: left;
+    font-size: 14px;
+    line-height: 100%;
+    padding: 10px;
+    text-align: center;
+    width: 50%;
+	cursor: pointer;
+    transition: color .1s  ease, background-color .15s ease;
+}
+.questionNoReaspekt{
+	border-right: 1px solid #3d3e3f;
+}
+.questionYesReaspekt {
+    border-left: 1px solid #d8d8d8;
+}
+.questionNoReaspekt:hover, .questionYesReaspekt:hover{
+	background-color: #646464;
+    color: #ffffff;
+}
+.questionNoReaspekt:active, .questionYesReaspekt:active{
+	box-shadow: 0 4px 4px -3px #000 inset;
+}
+.wrapGeoIpReaspekt{
+	font-family: Arial;
+}
+.reaspekt_geobase_title {
+    color: #363636;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 100%;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+.reaspekt_geobase_cities .reaspekt_geobase_act{
+	margin-bottom: 15px;
+	line-height: 100%;
+}
+.reaspekt_geobase_cities .reaspekt_geobase_act a,
+.reaspekt_geobase_cities .reaspekt_geobase_act strong{
+	font-size: 14px;
+    line-height: 100%;
+	color: #363636;
+    white-space: nowrap;
+}
+.reaspekt_geobase_cities .reaspekt_geobase_act a:after {
+    background: #407da6 none repeat scroll 0 0;
+}
+.reaspekt_geobase_find {
+    margin: 0 0 25px 0;
+    position: relative;
+}
+
+#reaspektGeobaseSearch {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #a7a7a7;
+    border-radius: none;
+    color: #363636;
+    font: 14px/20px Arial,sans-serif;
+    height: auto;
+    padding: 7px 8px 7px 0;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all .3s ease;
+}
+#reaspektGeobaseSearch:hover {
+    border-color: #7a7a7a;
+    background: #f7f7f7 none repeat scroll 0 0;
+}
+#reaspektGeobaseSearch:focus,
+#reaspektGeobaseSearch:focus-visible {
+    outline: none;
+    padding-left: 8px;
+    border-color: #7a7a7a;
+    background: #f7f7f7 none repeat scroll 0 0;
+}
+#reaspektResultCityAjax .reaspektSearchCity a {
+    color: #363636;
+    text-decoration: none;
+    border-bottom: 1px solid #5e5e5e;
+}
+#reaspektResultCityAjax .reaspektSearchCity a:hover {
+    text-decoration: none;
+    border-bottom-color: #f7f7f7;
+}
+#reaspektResultCityAjax {
+    background: #f7f7f7 none repeat scroll 0 0;
+    height: 140px;
+    overflow: overlay;
+    padding: 10px;
+    top: 100%;
+    width: 100%;
+    z-index: 3;
+    box-sizing: border-box;
+}
+#reaspektResultCityAjax::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+#reaspektResultCityAjax::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+#reaspektResultCityAjax::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: none;
+}
+.reaspektSearchCity {
+    line-height: 26px;
+}
+.reaspektSearchCity a{
+    color: #363636;
+    font-size: 14px;
+    line-height: 100%;
+}
+.reaspektSearchCity a:hover{
+    text-decoration: underline;
+}
+/* Preloader styles */
+.preloaderReaspekt {
+    display: inline-block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    left: calc(50% - 20px);
+    top: calc(50% - 20px);
+}
+.preloaderReaspekt.active {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    visibility: visible;
+}
+.preloaderReaspekt div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 31px;
+    height: 31px;
+    margin: 4px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    animation: preloaderReaspekt 1.2s cubic-bezier(0.3, 0, 0.3, 1) infinite;
+    border-color: #bbbbbb transparent transparent transparent;
+}
+.preloaderReaspekt div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.preloaderReaspekt div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.preloaderReaspekt div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes preloaderReaspekt {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* Preloader styles */
