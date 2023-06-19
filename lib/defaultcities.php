@@ -368,7 +368,7 @@ class DefaultCities
                          $response->addCookie($cookieGeobase);
                          $response->writeHeaders();
                     } else {
-                         return static::selectCityNameArray($defaultCity);
+                         return static::selectCityNameArray([$defaultCity]);
                     }
                }
           } else {
