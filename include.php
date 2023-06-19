@@ -13,6 +13,13 @@ use \Bitrix\Main\Page\Asset;
 
 IncludeModuleLangFile(__FILE__);
 
+$arClassesList = array(
+	// main classes
+	"ReaspGeoIP"	    => "classes/general/geoip.php",
+	"ReaspAdminGeoIP"   => "classes/general/geoip_admin.php",
+	// API classes
+);
+
 function GetPathLoadClasses($notDocumentRoot = false) {
 	if ($notDocumentRoot) {
 		return str_ireplace(Application::getDocumentRoot(), '', dirname(__DIR__));
@@ -22,6 +29,18 @@ function GetPathLoadClasses($notDocumentRoot = false) {
 }
 
 $nameCompany = "reaspekt";
+
+// fix strange update bug
+if (method_exists(CModule, "AddAutoloadClasses")) {
+	$asd = CModule::AddAutoloadClasses(
+		$nameCompany . ".geobase",
+		$arClassesList
+	);
+} else {
+	foreach ($arClassesList as $sClassName => $sClassFile) {
+		require_once(GetPathLoadClasses() . "/" . $nameCompany . ".geobase/" . $sClassFile);
+	}
+}
 
 class ReaspGeoBaseLoad {
 	const MID = "reaspekt.geobase";
