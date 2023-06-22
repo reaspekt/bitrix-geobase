@@ -207,11 +207,13 @@ class MaxmindRepo implements DatabaseInterface
           $documentRoot = \Bitrix\Main\Application::getDocumentRoot();
 
           umask(0);
-          if (!defined("AS_DIR_PERMISSIONS"))
+          if (!defined("AS_DIR_PERMISSIONS")) {
                define("AS_DIR_PERMISSIONS", 0777);
+          }
 
-          if (!defined("AS_FILE_PERMISSIONS"))
+          if (!defined("AS_FILE_PERMISSIONS")) {
                define("AS_FILE_PERMISSIONS", 0777);
+          }
 
           $zip = new \ZipArchive;
           $arFiles = [self::FILE_IP, self::FILE_CITIES];
