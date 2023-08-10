@@ -13,106 +13,102 @@ use Bitrix\Main\Web\Cookie;
 
 Loc::loadMessages(__FILE__);
 
-class ReaspAdminGeoIP {
+class ReaspAdminGeoIP
+{
     const MID = "reaspekt.geobase";
-    
-    function GetCitySelected() {
+
+    function GetCitySelected()
+    {
         
-		if($_SERVER["REQUEST_METHOD"] != "POST")
-			return false;
+        if ($_SERVER["REQUEST_METHOD"] != "POST") {
+            return false;
+        }
 
-		if(!check_bitrix_sessid('sessid') && !IsIE())
-			return false;
+        if (!check_bitrix_sessid('sessid') && !IsIE()) {
+            return false;
+        }
 
-		if(
+        if (
             !isset($_POST['city_name']) 
             && !isset($_POST['add_city'])
-			&& !isset($_POST['delete_city']) 
+            && !isset($_POST['delete_city'])
             && !isset($_POST['update'])
-        ) {
-            
-			return false;
-            
-		} elseif (
+        ) {            
+            return false; 
+        } elseif (
             empty($_POST['city_name']) 
             && empty($_POST['add_city'])
-			&& empty($_POST['delete_city']) 
+            && empty($_POST['delete_city'])
             && empty($_POST['update'])
         ) {
-            
-			die('pusto');
-            
-        } elseif(isset($_POST['city_name'])) { // search cities
-        
-			return ReaspAdminGeoIP::CitySearch(true);
-            
-		} elseif(isset($_POST['add_city']) && $_POST['add_city'] == 'Y') { // add city
-			
-            if(isset($_POST['city_id'])) {
-				global $DB;
-				$city_id = $DB->ForSql(htmlspecialchars($_POST['city_id']));
+            die('pusto');
+        } elseif (isset($_POST['city_name'])) { // search cities
+            return ReaspAdminGeoIP::CitySearch(true);
+        } elseif (isset($_POST['add_city']) && $_POST['add_city'] == 'Y') { // add city
+            if (isset($_POST['city_id'])) {
+                global $DB;
+                $city_id = $DB->ForSql(htmlspecialchars($_POST['city_id']));
 
-				$sites = CSite::GetList($by="sort", $order="desc", Array("ACTIVE" => "Y"));
-				while($Site = $sites->Fetch()) {
-					BXClearCache(true, $Site["LID"]."/reaspekt/geobase/");
-				}
-                
-				return(ReaspAdminGeoIP::AddSetCity($city_id));
-			}
-		} elseif(isset($_POST['update']) && $_POST['update'] == 'Y') { // restart html table
-			
+                $sites = CSite::GetList($by = "sort", $order = "desc", Array("ACTIVE" => "Y"));
+                while($Site = $sites->Fetch()) {
+                    BXClearCache(true, $Site["LID"] . "/reaspekt/geobase/");
+                }
+
+                return(ReaspAdminGeoIP::AddSetCity($city_id));
+            }
+        } elseif (isset($_POST['update']) && $_POST['update'] == 'Y') { // restart html table
             return(ReaspAdminGeoIP::UpdateCityRows());
-            
-		} elseif(isset($_POST['delete_city']) && $_POST['delete_city'] == 'Y') {
-			
-            if(isset($_POST['entry_id'])){
-				global $DB;
-				$city_id = $DB->ForSql(htmlspecialchars($_POST['entry_id']));
+        } elseif (isset($_POST['delete_city']) && $_POST['delete_city'] == 'Y') {
+            if (isset($_POST['entry_id'])) {
+                global $DB;
+                $city_id = $DB->ForSql(htmlspecialchars($_POST['entry_id']));
 
-				$sites = CSite::GetList($by="sort", $order="desc", Array("ACTIVE" => "Y"));
-				while ($Site= $sites->Fetch()) {
-					BXClearCache(true, $Site["LID"]."/reaspekt/geobase/");
-				}
+                $sites = CSite::GetList($by = "sort", $order = "desc", Array("ACTIVE" => "Y"));
+                while ($Site = $sites->Fetch()) {
+                    BXClearCache(true, $Site["LID"]."/reaspekt/geobase/");
+                }
 
-				return (ReaspAdminGeoIP::DeleteCity($city_id));
-			}
-		}
-	}
-    
-    function CitySearch($adminSection = false) {
-		$city = trim(urldecode($_POST['city_name']));
-        
-		if (SITE_CHARSET == 'windows-1251') {
-			$city1 = @iconv("UTF-8", "windows-1251//IGNORE", $city); // All AJAX requests come in Unicode
-			if($city1)
-				$city = $city1;	// if used Windows-machine
-		}
-        
-		$city = addslashes($city);
-		$citylen = strlen($city);
+                return (ReaspAdminGeoIP::DeleteCity($city_id));
+            }
+        }
+    }
 
-		$arCity = array();
-		$i = 0;
+    function CitySearch($adminSection = false)
+    {
+        $city = trim(urldecode($_POST['city_name']));
 
-		if (isset($_POST['lang']) && strtolower($_POST['lang']) == "ru") { // LANGUAGE_ID
-		
+        if (SITE_CHARSET == 'windows-1251') {
+            $city1 = @iconv("UTF-8", "windows-1251//IGNORE", $city); // All AJAX requests come in Unicode
+            if ($city1) {
+                $city = $city1;    // if used Windows-machine
+            }
+        }
+
+        $city = addslashes($city);
+        $citylen = strlen($city);
+
+        $arCity = array();
+        $i = 0;
+
+        if (isset($_POST['lang']) && strtolower($_POST['lang']) == "ru") { // LANGUAGE_ID
             if ($citylen > 1) {
                 $arCity = ReaspGeoIP::SelectQueryCity($city);
-                
+
                 if (SITE_CHARSET == 'windows-1251') {
                     $arCity = ReaspGeoIP::iconvArrUtfToUtf8($arCity);
                 }
             }
-		}
-        
-		echo json_encode($arCity);
-	}
-    
-    function AddSetCity($city_id) {
-		global $DB;
-        
+        }
+
+        echo json_encode($arCity);
+    }
+
+    function AddSetCity($city_id)
+    {
+        global $DB;
+
         $arCity = ReaspGeoIP::SelectCityId($city_id);
-        
+
         if ($arCity["ID"]) {
             //Смотрим настройки модуля
             $reaspekt_city_manual_default = Option::get(self::MID, "reaspekt_city_manual_default");
@@ -125,17 +121,18 @@ class ReaspAdminGeoIP {
         } else {
             return false;
         }
-        
-		return $arCity["ID"];
-	}
-    
-    function UpdateCityRows() {
+
+        return $arCity["ID"];
+    }
+
+    function UpdateCityRows()
+    {
         $reaspekt_city_manual_default = Option::get(self::MID, "reaspekt_city_manual_default");
         $ar_reaspekt_city_manual_default = unserialize($reaspekt_city_manual_default);
         $arCityData = ReaspGeoIP::SelectCityIdArray($ar_reaspekt_city_manual_default, true);
-        
+
         $strCityDefaultTR = "";
-        
+
         foreach ($ar_reaspekt_city_manual_default as $idCity) {
             $strCityDefaultTR .= '<tr class="reaspekt_geobase_city_line">';
             $strCityDefaultTR .= "<td>" . $arCityData[$idCity]["ID"] . "</td>";
@@ -144,37 +141,39 @@ class ReaspAdminGeoIP {
             $strCityDefaultTR .= "<td>" . $arCityData[$idCity]["CITY"] . "</td>";
             $strCityDefaultTR .= "<td>" . $arCityData[$idCity]["REGION"] . "</td>";
             $strCityDefaultTR .= "<td>" . $arCityData[$idCity]["OKRUG"] . "</td>";
-            $strCityDefaultTR .= '<td><input type="submit" name="reaspekt_geobase_del_'.$idCity.'" value="'.GetMessage("REASPEKT_TABLE_CITY_DELETE").'" onclick="reaspekt_geobase_delete_click('.$idCity.');return false;"></td>';
+            $strCityDefaultTR .= '<td><input type="submit" name="reaspekt_geobase_del_' . $idCity . '" value="' . GetMessage("REASPEKT_TABLE_CITY_DELETE") . '" onclick="reaspekt_geobase_delete_click(' . $idCity . ');return false;"></td>';
             $strCityDefaultTR .= "</tr>";
         }
-        
+
         echo $strCityDefaultTR;
     }
-    
-    function DeleteCity($ID) {
-		global $DB;
-		$ID = IntVal($ID);
 
-		if($ID <= 0)
-			return false;
+    function DeleteCity($ID)
+    {
+        global $DB;
+        $ID = IntVal($ID);
 
-		$reaspekt_city_manual_default = Option::get(self::MID, "reaspekt_city_manual_default");
+        if($ID <= 0)
+            return false;
+
+        $reaspekt_city_manual_default = Option::get(self::MID, "reaspekt_city_manual_default");
         $ar_reaspekt_city_manual_default = unserialize($reaspekt_city_manual_default);
-        
+
         foreach ($ar_reaspekt_city_manual_default as $keyCity => &$idCity) {
             if (intval($idCity) == $ID) {
                 unset($ar_reaspekt_city_manual_default[$keyCity]);
             }
         }
-        
-        $reaspekt_city_manual_default = serialize($ar_reaspekt_city_manual_default);
-        
-        Option::set(self::MID, "reaspekt_city_manual_default", $reaspekt_city_manual_default);
-        
-        return true;
-	}
 
-    function cidrToRange($cidr) {
+        $reaspekt_city_manual_default = serialize($ar_reaspekt_city_manual_default);
+
+        Option::set(self::MID, "reaspekt_city_manual_default", $reaspekt_city_manual_default);
+
+        return true;
+    }
+
+    function cidrToRange($cidr)
+    {
         $range = array();
         $cidr = explode('/', $cidr);
         $range[0] = long2ip((ip2long($cidr[0])) & ((-1 << (32 - (int)$cidr[1]))));
@@ -182,31 +181,35 @@ class ReaspAdminGeoIP {
         return $range;
     }
 
-    function SetCurrentStatus($str) {
+    function SetCurrentStatus($str)
+    {
         global $strLog;
         $strLog .= $str."\n";
     }
 
-    function SetCurrentProgress($cur, $total = 0) {
+    function SetCurrentProgress($cur, $total = 0)
+    {
         global $status;
-        if (!$total){
+        if (!$total) {
             $total  = 100;
-            $cur	= 0;
+            $cur    = 0;
         }
-        $val = intval($cur/$total*100);
-        if ($val > 100){
+        $val = intval($cur / $total * 100);
+        if ($val > 100) {
             $val = 100;
         }
 
         $status = $val;
     }
 
-    function reaspekt_geobase_getmicrotime() {
+    function reaspekt_geobase_getmicrotime()
+    {
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
 
-    function json_encode_cyr($str) {
+    function json_encode_cyr($str)
+    {
         $arr_replace_utf = array(   'null', '\u0410', '\u0430','\u0411','\u0431','\u0412','\u0432',
             '\u0413','\u0433','\u0414','\u0434','\u0415','\u0435','\u0401','\u0451','\u0416',
             '\u0436','\u0417','\u0437','\u0418','\u0438','\u0419','\u0439','\u041a','\u043a',
@@ -225,13 +228,15 @@ class ReaspAdminGeoIP {
         $str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
         return $str2;
     }
-    
-    function getApiKey() {
+
+    function getApiKey()
+    {
         $reaspekt_city_apikey = Option::get(self::MID, "reaspekt_set_apikey");
         return $reaspekt_city_apikey;
     }
 
-    function LoadFile ($strRequestedUrl, $strFilename, $iTimeOut) {
+    function LoadFile($strRequestedUrl, $strFilename, $iTimeOut)
+    {
         global $strUserAgent;
         $iTimeOut = IntVal($iTimeOut);
         if ($iTimeOut > 0) {
@@ -261,17 +266,17 @@ class ReaspAdminGeoIP {
             $strRealUrl = $strRealUrl_tmp;
             $iStartSize = filesize ($strFilename . ".tmp");
         }
-        
+
         // END: Initialize if spool download
 
         // Look for a file and requests INFO
         do {
-            $lasturl	= $strRealUrl;
+            $lasturl    = $strRealUrl;
             $parsedUrl  = parse_url ($strRealUrl);
-            $host	   = $parsedUrl["host"];
-            $port	   = $parsedUrl["port"];
+            $host       = $parsedUrl["host"];
+            $port       = $parsedUrl["port"];
             $hostName   = $host;
-            $port	   = $port ? $port : "80";
+            $port       = $port ? $port : "80";
 
             $socketHandle = fsockopen ($host, $port, $error_id, $error_msg, 30);
             if (!$socketHandle) {
@@ -323,7 +328,7 @@ class ReaspAdminGeoIP {
             }
         } while (true);
         // END: Look for a file and requests INFO
-        
+
         $bCanContinueDownload = ($strAcceptRanges == "bytes");
 
         // If it is possible to complete the download
@@ -446,5 +451,4 @@ class ReaspAdminGeoIP {
         }
     // END: download file
     }
-
 }

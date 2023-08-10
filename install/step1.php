@@ -10,31 +10,31 @@
 use \Bitrix\Main\Localization\Loc;
 
 if (!check_bitrix_sessid())
-	return;
+    return;
 
 if ($ex = $APPLICATION->GetException()){
-	echo CAdminMessage::ShowMessage(array(
-		"TYPE" => "ERROR",
-		"MESSAGE" => Loc::getMessage("MOD_INST_ERR"),
-		"DETAILS" => $ex->GetString(),
-		"HTML" => true,
-	));
+    echo CAdminMessage::ShowMessage(array(
+        "TYPE" => "ERROR",
+        "MESSAGE" => Loc::getMessage("MOD_INST_ERR"),
+        "DETAILS" => $ex->GetString(),
+        "HTML" => true,
+    ));
 }
 
 if (!\Bitrix\Main\Loader::includeModule("highloadblock")) {
-	return;
+    return;
 }
 ?>
 
 <form action="<?=$APPLICATION->GetCurPage()?>">
-	<?=bitrix_sessid_post()?>
-	<input type="hidden" name="lang" value="<?=LANGUAGE_ID?>"/>
-	<input type="hidden" name="id" value="reaspekt.geobase"/>
-	<input type="hidden" name="install" value="Y"/>
-	<input type="hidden" name="step" value="2"/>
-	<input type="checkbox" name="ONLY_CIS" id="ONLY_CIS" value="Y" checked/>
-	<label for="ONLY_CIS"><?=Loc::getMessage('INSTALL_GEOBASE_ONLY_CIS')?></label>
-	<br/><br/>
-	
-	<input type="submit" name="" value="<?= Loc::getMessage("MOD_INSTALL")?>"/>
+    <?=bitrix_sessid_post()?>
+    <input type="hidden" name="lang" value="<?=LANGUAGE_ID?>"/>
+    <input type="hidden" name="id" value="reaspekt.geobase"/>
+    <input type="hidden" name="install" value="Y"/>
+    <input type="hidden" name="step" value="2"/>
+    <input type="checkbox" name="ONLY_CIS" id="ONLY_CIS" value="Y" checked/>
+    <label for="ONLY_CIS"><?=Loc::getMessage('INSTALL_GEOBASE_ONLY_CIS')?></label>
+    <br/><br/>
+    
+    <input type="submit" name="" value="<?= Loc::getMessage("MOD_INSTALL")?>"/>
 </form>
