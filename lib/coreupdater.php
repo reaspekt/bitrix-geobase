@@ -1,6 +1,7 @@
 <?
 namespace Reaspekt\Geobase;
 use \Bitrix\Main\Application;
+use \Bitrix\Main\EventManager;
 use \Bitrix\Main\IO\Directory;
 use \Bitrix\Main\IO\File;
 use \Bitrix\Main\Config\Option;
@@ -22,12 +23,18 @@ class CoreUpdater
                $corePath . "classes/",
                $corePath . "install/new.core/",
           ];
-          $arReplacePaths = ["options.php", "include.php", "default_option.php"];
+          $arRemoveFiles = [
+               $corePath . "include.php",
+          ];
+          $arReplacePaths = ["options.php", "default_option.php"];
 
           if (
 			CheckVersion(phpversion(), '7.4.0')
 			&& CheckVersion(SM_VERSION, '21.1200.800')
 		) {
+               // We don't use event handlers in new core
+               static::unregisterEvents($moduleID);
+
                // Replace files with new core
                foreach ($arReplacePaths as $fileName) {
                     static::replaceFiles(
@@ -36,6 +43,11 @@ class CoreUpdater
                     );
                }
                // Remove old components, classes and endpoints
+               foreach ($arRemoveFiles as $removeFile) {
+                    if (File::isFileExists($removeFile)) {
+                         (new File($removeFile))->delete();
+                    }
+               }
                foreach ($arRemovePaths as $removePath) {
                     if (Directory::isDirectoryExists($removePath)) {
                          Directory::deleteDirectory($removePath);
@@ -51,7 +63,6 @@ class CoreUpdater
                     $field = LocalRepo::addCountryField();
                     LocalRepo::removeCountryField($field);
                }
-
                Option::set($moduleID, "reaspekt_transferred_core", "Y");
           } else {
                return ["ERROR" => "BAD_VERSION"];
@@ -67,6 +78,20 @@ class CoreUpdater
                $contentNewCore = $newCoreFile->getContents();
                $oldCoreFile->putContents($contentNewCore);
                $newCoreFile->delete();
+          }
+     }
+
+     private static function unregisterEvents(string $moduleID): void
+     {
+          $arHandlers = EventManager::getInstance()->findEventHandlers("main", "OnProlog", ["TO_MODULE_ID" => $moduleID]);
+          if (!empty($arHandlers)) {
+               EventManager::getInstance()->unRegisterEventHandler(
+                    "main",
+                    "OnProlog",
+                    $moduleID,
+                    "ReaspGeoBaseLoad",
+                    "OnPrologHandler"
+               );
           }
      }
 }

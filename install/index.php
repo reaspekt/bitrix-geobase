@@ -1,9 +1,9 @@
 <?
 /**
  * Company developer: REASPEKT
- * Developer: adel yusupov
+ * Developer: reaspekt
  * Site: http://www.reaspekt.ru
- * E-mail: adel@rreaspekt_geobase_citieseaspekt.ru
+ * E-mail: info@reaspekt.ru
  * @copyright (c) 2016 REASPEKT
  */
 use \Bitrix\Main\Localization\Loc;
@@ -37,15 +37,15 @@ Class reaspekt_geobase extends CModule {
 
 	function __construct()
 	{
-		$arModuleVersion = array();
+		$arModuleVersion = [];
 
 		include(__DIR__ . "/version.php");
 
 		//Exceptions
-		$this->exclusionAdminFiles=array(
+		$this->exclusionAdminFiles = [
 			'..',
 			'.',
-		);
+		];
 
         	$this->nameCompany = Configuration::getInstance('reaspekt.geobase')->get('information')['developer'];
 		$this->MODULE_VERSION = $arModuleVersion["VERSION"];
@@ -57,7 +57,7 @@ Class reaspekt_geobase extends CModule {
 		$this->PARTNER_URI = Loc::getMessage("REASPEKT_GEOBASE_PARTNER_URI");
 
 		$this->MODULE_SORT = 1;
-		$this->SHOW_SUPER_ADMIN_GROUP_RIGHTS='N';
+		$this->SHOW_SUPER_ADMIN_GROUP_RIGHTS = 'N';
 		$this->MODULE_GROUP_RIGHTS = "N";
 
 		if (!\Bitrix\Main\Loader::includeModule("highloadblock")) {
@@ -67,12 +67,13 @@ Class reaspekt_geobase extends CModule {
 	}
 
 	//Define the place where to put module
-	public function GetPath($notDocumentRoot=false)
+	public function GetPath($notDocumentRoot = false)
 	{
-		if ($notDocumentRoot)
+		if ($notDocumentRoot) {
 			return str_ireplace(Application::getDocumentRoot(), '', dirname(__DIR__));
-		else
+		} else {
 			return dirname(__DIR__);
+		}
 	}
 
 	//Checking that the system supports D7
@@ -147,13 +148,16 @@ Class reaspekt_geobase extends CModule {
 				));
 			}
 
-			EventManager::getInstance()->unRegisterEventHandler(
-				"main",
-				"OnProlog",
-				$this->MODULE_ID,
-				"ReaspGeoBaseLoad",
-				"OnPrologHandler"
-			); 
+			$arHandlers = EventManager::getInstance()->findEventHandlers("main", "OnProlog", ["TO_MODULE_ID" => $this->MODULE_ID]);
+			if (!empty($arHandlers)) {
+				EventManager::getInstance()->unRegisterEventHandler(
+					"main",
+					"OnProlog",
+					$this->MODULE_ID,
+					"ReaspGeoBaseLoad",
+					"OnPrologHandler"
+				);
+			}
 
 			ModuleManager::unRegisterModule($this->MODULE_ID);
 
@@ -177,14 +181,6 @@ Class reaspekt_geobase extends CModule {
 			return false;
 		}
 
-		EventManager::getInstance()->registerEventHandler(
-			"main",
-			"OnProlog",
-			$this->MODULE_ID,
-			"ReaspGeoBaseLoad",
-			"OnPrologHandler"
-		);
-
 		return true;
 	}
 
@@ -192,10 +188,10 @@ Class reaspekt_geobase extends CModule {
 	{
 		global $DB, $DBType, $APPLICATION;
 
-		if (!$arParams['savedata']){
+		if (!$arParams['savedata']) {
 			$requestHL = \Bitrix\Highloadblock\HighloadBlockTable::getList(array('order' => array('NAME'), 'filter' => array("TABLE_NAME" => array("reaspekt_geobase_cities","reaspekt_geobase_codeip"))));
 
-			while ($rowHL = $requestHL->fetch()){
+			while ($rowHL = $requestHL->fetch()) {
 				if ($DB->TableExists($rowHL["TABLE_NAME"])) {
 					HL\HighloadBlockTable::delete($rowHL["ID"]);
 				}
@@ -209,20 +205,22 @@ Class reaspekt_geobase extends CModule {
 	{
 		//Making folder 'geobase' in /upload/ to download there geoip bases
 		if (!\Bitrix\Main\IO\Directory::isDirectoryExists(Application::getDocumentRoot() . "/upload/" . $this->nameCompany . "/geobase/")) {
-			if(!defined("BX_DIR_PERMISSIONS"))
+			if (!defined("BX_DIR_PERMISSIONS")) {
 				mkdir(Application::getDocumentRoot() . "/upload/" . $this->nameCompany . "/geobase/", 0755, true);
-			else
+			} else {
 				mkdir(Application::getDocumentRoot() . "/upload/" . $this->nameCompany . "/geobase/", BX_DIR_PERMISSIONS, true);
+			}
 		}
 
 		//Path to folder /install/components in module
 		$pathComponents = $this->GetPath() . "/install/components";
 
 		//Check if the folder exists
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($pathComponents))
+		if (\Bitrix\Main\IO\Directory::isDirectoryExists($pathComponents)) {
 			CopyDirFiles($pathComponents, Application::getDocumentRoot() . "/" . $this->pathResourcesCompany . "/components", true, true);
-        	else
-            	throw new \Bitrix\Main\IO\InvalidPathException($pathComponents);
+		} else {
+			throw new \Bitrix\Main\IO\InvalidPathException($pathComponents);
+		}
 
 		return true;
 	}
