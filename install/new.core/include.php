@@ -26,10 +26,10 @@ $nameCompany = "reaspekt";
 class ReaspGeoBaseLoad {
 	const MID = "reaspekt.geobase";
 
-	function OnPrologHandler() {
+	public static function OnPrologHandler() {
 		global $APPLICATION;
 		if (IsModuleInstalled(self::MID)) {
-			if (!defined(ADMIN_SECTION) && ADMIN_SECTION !== true) {
+			if (!defined("ADMIN_SECTION") && "ADMIN_SECTION" !== true) {
 				Asset::getInstance()->addJs("/bitrix/js/main/core/core.min.js", true);
 				return true;
 			}

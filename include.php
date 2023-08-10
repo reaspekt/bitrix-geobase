@@ -9,6 +9,7 @@
 use \Bitrix\Main\Application;
 use \Bitrix\Main\Config\Configuration;
 use \Bitrix\Main\Config\Option;
+use \Bitrix\Main\IO\File;
 use \Bitrix\Main\Page\Asset; 
 
 IncludeModuleLangFile(__FILE__);
@@ -31,7 +32,7 @@ function GetPathLoadClasses($notDocumentRoot = false) {
 $nameCompany = "reaspekt";
 
 // fix strange update bug
-if (method_exists(CModule, "AddAutoloadClasses")) {
+if (method_exists("CModule", "AddAutoloadClasses")) {
 	$asd = CModule::AddAutoloadClasses(
 		$nameCompany . ".geobase",
 		$arClassesList
@@ -44,12 +45,33 @@ if (method_exists(CModule, "AddAutoloadClasses")) {
 
 class ReaspGeoBaseLoad {
 	const MID = "reaspekt.geobase";
-
-	function OnPrologHandler() {
+	
+	public static function OnPrologHandler() {
 		global $APPLICATION;
 		if (IsModuleInstalled(self::MID)) {
-			if (!defined(ADMIN_SECTION) && ADMIN_SECTION !== true) {
+			$arFilesPath = [
+				"css" => [
+					"/local/css/reaspekt/" . self::MID . "/style.css"
+				],
+				"js" => [
+					"/local/js/reaspekt/" . self::MID . "/script.js"
+				]
+			];
+
+			if (!defined("ADMIN_SECTION") && "ADMIN_SECTION" !== true) {
 				Asset::getInstance()->addJs("/bitrix/js/main/core/core.min.js", true);
+
+				foreach ($arFilesPath["css"] as $cssFile) {
+					if (File::isFileExists(\Bitrix\Main\Application::getDocumentRoot() . $cssFile)) {
+						Asset::getInstance()->addCss($cssFile, true);
+					}
+				}
+				foreach ($arFilesPath["js"] as $jsFile) {
+					if (File::isFileExists(\Bitrix\Main\Application::getDocumentRoot() . $jsFile)) {
+						Asset::getInstance()->addJs($jsFile, true);
+					}
+				}
+
 				return true;
 			}
 		}

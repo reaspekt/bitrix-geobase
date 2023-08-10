@@ -55,7 +55,7 @@ class Main
           return null;
      }
 
-     public function standartFormat(array $arData = []): ?array
+     public static function standartFormat(array $arData = []): ?array
      {
           if (empty($arData)) {
                return ["ERROR" => "No data"];
