@@ -21,7 +21,8 @@ $arClassesList = array(
 	// API classes
 );
 
-function GetPathLoadClasses($notDocumentRoot = false) {
+function GetPathLoadClasses($notDocumentRoot = false)
+{
 	if ($notDocumentRoot) {
 		return str_ireplace(Application::getDocumentRoot(), '', dirname(__DIR__));
 	} else {
@@ -32,7 +33,7 @@ function GetPathLoadClasses($notDocumentRoot = false) {
 $nameCompany = "reaspekt";
 
 // fix strange update bug
-if (method_exists("CModule", "AddAutoloadClasses")) {
+if (method_exists(CModule::class, "AddAutoloadClasses")) {
 	$asd = CModule::AddAutoloadClasses(
 		$nameCompany . ".geobase",
 		$arClassesList
@@ -43,10 +44,12 @@ if (method_exists("CModule", "AddAutoloadClasses")) {
 	}
 }
 
-class ReaspGeoBaseLoad {
+class ReaspGeoBaseLoad
+{
 	const MID = "reaspekt.geobase";
-	
-	public static function OnPrologHandler() {
+
+	public static function OnPrologHandler()
+	{
 		global $APPLICATION;
 		if (IsModuleInstalled(self::MID)) {
 			$arFilesPath = [

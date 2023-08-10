@@ -31,8 +31,7 @@ class GeoipReaspektComponent extends CBitrixComponent
             $arResult["POPUP_HIDE"] = DefaultCities::checkPopupShow();
         }
 
-        
-        if ($this->StartResultCache()) {
+        if ($this->StartResultCache($this->arParams["CACHE_TIME"], $arResult["GEO_CITY"]["UF_XML_ID"])) {
             $arResult["DEFAULT_CITY"] = DefaultCities::defaultCityList();
             $this->arResult = $arResult;
             $this->includeComponentTemplate();

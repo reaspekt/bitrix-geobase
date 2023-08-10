@@ -13,7 +13,8 @@ use \Bitrix\Main\Page\Asset;
 
 IncludeModuleLangFile(__FILE__);
 
-function GetPathLoadClasses($notDocumentRoot = false) {
+function GetPathLoadClasses($notDocumentRoot = false)
+{
 	if ($notDocumentRoot) {
 		return str_ireplace(Application::getDocumentRoot(), '', dirname(__DIR__));
 	} else {
@@ -23,10 +24,12 @@ function GetPathLoadClasses($notDocumentRoot = false) {
 
 $nameCompany = "reaspekt";
 
-class ReaspGeoBaseLoad {
+class ReaspGeoBaseLoad
+{
 	const MID = "reaspekt.geobase";
 
-	public static function OnPrologHandler() {
+	public static function OnPrologHandler()
+	{
 		global $APPLICATION;
 		if (IsModuleInstalled(self::MID)) {
 			if (!defined("ADMIN_SECTION") && "ADMIN_SECTION" !== true) {
