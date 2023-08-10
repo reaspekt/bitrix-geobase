@@ -15,7 +15,7 @@ class ReaspGeoIP
 
     const MID = "reaspekt.geobase";
 
-    function StatusTabelDB()
+    public static function StatusTabelDB()
     {
         global $DB;
 
@@ -28,7 +28,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function SelectQueryCity($strCityName = "")
+    public static function SelectQueryCity($strCityName = "")
     {
         global $DB;
 
@@ -71,7 +71,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function DefaultCityList()
+    public static function DefaultCityList()
     {
         $arResult["DEFAULT_CITY"] = array();
         $arResult["DEFAULT_CITY_ID"] = array();
@@ -91,7 +91,7 @@ class ReaspGeoIP
         return $arResult["DEFAULT_CITY"];
     }
     
-    function SelectCityXmlIdArray($arCityXmlId = array(), $autoKey = false)
+    public static function SelectCityXmlIdArray($arCityXmlId = array(), $autoKey = false)
     {
         global $DB;
 
@@ -147,7 +147,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function SelectCityIdArray($arCityId = array(), $autoKey = false)
+    private static function SelectCityIdArray($arCityId = array(), $autoKey = false)
     {
         global $DB;
 
@@ -202,7 +202,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function SelectCityNameArray($arCityName = array(), $autoKey = false)
+    private static function SelectCityNameArray($arCityName = array(), $autoKey = false)
     {
         global $DB;
 
@@ -256,7 +256,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function SelectCityId($сityId = 0)
+    public static function SelectCityId($сityId = 0)
     {
         global $DB;
 
@@ -305,7 +305,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    function SetCityYes()
+    public static function SetCityYes()
     {
         global $APPLICATION;
 
@@ -316,7 +316,7 @@ class ReaspGeoIP
         return json_encode($arResult);
     }
 
-    function SetCityManual($strPostCityId = "")
+    public static function SetCityManual($strPostCityId = "")
     {
         global $APPLICATION;
 
@@ -351,7 +351,7 @@ class ReaspGeoIP
         return $arResult;
     }
 
-    static function GetAddr()
+    public static function GetAddr()
     {
         global $APPLICATION;
         $strData = $APPLICATION->get_cookie("REASPEKT_GEOBASE");
@@ -391,7 +391,7 @@ class ReaspGeoIP
         return $_SESSION["REASPEKT_GEOBASE"];
     }
 
-    function GetDataIp($ip = "")
+    public static function GetDataIp($ip = "")
     {
         if (!strlen(trim($ip))) {
             return false;
@@ -408,7 +408,7 @@ class ReaspGeoIP
         return $arData;
     }
 
-    function GetDataName($strName = "")
+    public static function GetDataName($strName = "")
     {
 
         if (!strlen(trim($strName))) {
@@ -428,7 +428,7 @@ class ReaspGeoIP
         return $arData;
     }
 
-    private function StandartFormat($arData = array())
+    private static function StandartFormat($arData = array())
     {
 
         if (empty($arData)) {
@@ -476,7 +476,7 @@ class ReaspGeoIP
         return $arDataStandart;
     }
 
-    private function GetGeoData($ip = "")
+    private static function GetGeoData($ip = "")
     {
         if (!$ip) {
             return false;
@@ -507,7 +507,7 @@ class ReaspGeoIP
         return $arData;
     }
 
-    private function GetGeoDataId($id = 0)
+    private static function GetGeoDataId($id = 0)
     {
         if (!$id) {
             return false;
@@ -530,7 +530,7 @@ class ReaspGeoIP
         return $arData;
     }
     
-    private function GetGeoDataName($strName = "")
+    private static function GetGeoDataName($strName = "")
     {
         if (!strlen(trim($strName))) {
             return false;
@@ -551,7 +551,7 @@ class ReaspGeoIP
         return $arData;
     }
 
-    function GetGeoDataIpgeobase_ru($ip = "")
+    public static function GetGeoDataIpgeobase_ru($ip = "")
     {
         if (!strlen(trim($ip))) {
             return false;
@@ -586,7 +586,7 @@ class ReaspGeoIP
         return ($arData);
     }
 
-    function GetGeoDataGeoip_Elib_ru($ip = "")
+    public static function GetGeoDataGeoip_Elib_ru($ip = "")
     {
         if (!strlen(trim($ip))) {
             return false;
@@ -634,7 +634,7 @@ class ReaspGeoIP
         return ($arData);
     }
 
-    function CheckServiceAccess($address) // Check for availability of the service
+    public static function CheckServiceAccess($address) // Check for availability of the service
     {
         stream_context_set_default(
             array(
@@ -652,7 +652,7 @@ class ReaspGeoIP
         return false;
     }
 
-    function ParseXML($text)
+    private static function ParseXML($text)
     {
         if (strlen($text) > 0) {
 
@@ -681,7 +681,7 @@ class ReaspGeoIP
         return ($ar[0]);
     }
 
-    function InitBots()
+    private static function InitBots()
     {
         $bots = array(
             'rambler',
@@ -710,7 +710,7 @@ class ReaspGeoIP
         return false;
     }
 
-    function CodeJSON($data)
+    private static function CodeJSON($data)
     {
         $jsonData = CUtil::PhpToJSObject($data);
 
@@ -723,7 +723,7 @@ class ReaspGeoIP
         return $jsonData;
     }
 
-    static function deCodeJSON($data)
+    private static function deCodeJSON($data)
     {
         $resData = (array)json_decode($data, true);
 
@@ -734,7 +734,7 @@ class ReaspGeoIP
         return $resData;
     }
 
-    function StrReplaceStrongSearchCity($search = "", $replace = "", $strCity = "")
+    public static function StrReplaceStrongSearchCity($search = "", $replace = "", $strCity = "")
     {
         if (
             !$search
@@ -777,7 +777,7 @@ class ReaspGeoIP
         return $arProp;
     }
 
-    function iconvArrUtfToUtf8($data)
+    public static function iconvArrUtfToUtf8($data)
     {
         $arProp = "";
 
@@ -796,7 +796,7 @@ class ReaspGeoIP
         return $arProp;
     }
 
-    function GetIsUpdateDataFile($Host, $Path, $File, $localFilename)
+    public static function GetIsUpdateDataFile($Host, $Path, $File, $localFilename)
     {
         $response = "N";
         if (file_exists($localFilename)) {
