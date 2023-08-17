@@ -225,6 +225,10 @@ $(document).ready(function() {
         }
     }, function(response) {
         console.log(response);
+        if (response.status == "error") {
+            document.getElementById('reaspektDBUpdateBtn').style.display = 'none';
+            document.getElementsByClassName('reasp-gbase-main-box')[0].innerHTML = "" + response.errors[0].message;
+        }
     });
 })
 </script>

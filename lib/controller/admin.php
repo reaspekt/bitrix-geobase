@@ -20,10 +20,15 @@ class Admin extends \Bitrix\Main\Engine\Controller
         return $result;
     }
 
-    public function checkLatestVersionAction(): array
+    public function checkLatestVersionAction(): ?array
     {
         $isUpdateNeeded = DataBase::checkVersion();
-        return ["LAST_VERSION" => $isUpdateNeeded];
+        if ($isUpdateNeeded["ERROR"]) {
+            $this->addError(new Error($isUpdateNeeded["ERROR"], '1001'));
+            return null;
+        }
+
+        return $isUpdateNeeded;
     }
 
     public function updateSelectedCitiesAction(array $obData): ?array
