@@ -106,11 +106,11 @@ class DataBase
         return ["FINISHED" => $resultState["FINISHED"], "PROGRESS" => $resultState["PROGRESS"]];
     }
 
-    public static function checkVersion(): string
+    public static function checkVersion(): array
     {
         $recordedState = json_decode(Option::get(self::MID, self::OPTION_STATUS), true);
         if ($recordedState && !empty($recordedState)) {
-            return "N";
+            return ["LAST_VERSION" => "N"];
         }
         return MaxmindRepo::checkLatestVersion();
     }

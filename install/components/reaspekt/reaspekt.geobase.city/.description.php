@@ -7,12 +7,12 @@ $arComponentDescription = array(
         "ICON" => "/images/icon.gif",
         "CACHE_PATH" => "Y",
         "PATH" => array(
-                "ID" => "REASPEKT.RU",
-                "NAME" => GetMessage("REASPEKT_DESC_SECTION_NAME_NEW"),
-                "CHILD" => array(
-                        "ID" => "REASPEKT_serv_new",
-                        "NAME" => GetMessage("REASPEKT_GEOIP_SERVICE_NEW")
-                )
+            "ID" => "REASPEKT.RU",
+            "NAME" => GetMessage("REASPEKT_DESC_SECTION_NAME_NEW"),
+            "CHILD" => array(
+                "ID" => "REASPEKT_serv_new",
+                "NAME" => GetMessage("REASPEKT_GEOIP_SERVICE_NEW")
+            )
         ),
 );
 
