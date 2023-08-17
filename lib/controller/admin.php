@@ -10,47 +10,52 @@ Loc::loadMessages(__FILE__);
 
 class Admin extends \Bitrix\Main\Engine\Controller
 {
-     public function updateAction(): array
-     {
-          $dbService = new DataBase();
-          $result = $dbService::update();
-          if ($result["ERROR"]) {
-               $this->addError(new Error(Loc::getMessage('ERROR_BASE_NOT_DOWNLOADED') . ' ' . $result["ERROR"], '1001'));
-          }
-          return $result;
-     }
+    public function updateAction(): array
+    {
+        $dbService = new DataBase();
+        $result = $dbService::update();
+        if ($result["ERROR"]) {
+            $this->addError(new Error(Loc::getMessage('ERROR_BASE_NOT_DOWNLOADED') . ' ' . $result["ERROR"], '1001'));
+        }
+        return $result;
+    }
 
-     public function checkLatestVersionAction(): array
-     {
-          $isUpdateNeeded = DataBase::checkVersion();
-          return ["LAST_VERSION" => $isUpdateNeeded];
-     }
+    public function checkLatestVersionAction(): ?array
+    {
+        $isUpdateNeeded = DataBase::checkVersion();
+        if ($isUpdateNeeded["ERROR"]) {
+            $this->addError(new Error($isUpdateNeeded["ERROR"], '1001'));
+            return null;
+        }
 
-     public function updateSelectedCitiesAction(array $obData): ?array
-     {
-          $result = DefaultCities::getCitySelected($obData);
-          if ($result["ERROR"]) {
-               $this->addError(new Error($result["ERROR"], '1001'));
-               return null;
-          }
+        return $isUpdateNeeded;
+    }
 
-          return $result;
-     }
-     
-     public function updateCoreAction(): ?array
-     {
-          $result = CoreUpdater::updateCore();
+    public function updateSelectedCitiesAction(array $obData): ?array
+    {
+        $result = DefaultCities::getCitySelected($obData);
+        if ($result["ERROR"]) {
+            $this->addError(new Error($result["ERROR"], '1001'));
+            return null;
+        }
 
-          if ($result["ERROR"]) {
-               switch ($result["ERROR"]) {
-                    case "BAD_VERSION":
-                         $this->addError(new Error(Loc::getMessage('ERROR_BAD_VERSION'), '1002'));
-                         break;
-               }
+        return $result;
+    }
+    
+    public function updateCoreAction(): ?array
+    {
+        $result = CoreUpdater::updateCore();
 
-               return null;
-          }
+        if ($result["ERROR"]) {
+            switch ($result["ERROR"]) {
+                case "BAD_VERSION":
+                    $this->addError(new Error(Loc::getMessage('ERROR_BAD_VERSION'), '1002'));
+                    break;
+            }
 
-          return $result;
-     }
+            return null;
+        }
+
+        return $result;
+    }
 }
